@@ -1,0 +1,31 @@
+{
+  "version": "0.2",
+  "import": ["@cspell/dict-de-de/cspell-ext.json"],
+  "language": "en",
+  "ignorePaths": [
+    "pnpm-lock.yml",
+    ".vscode/settings.json",
+    ".cspell.json",
+    ".nuxt",
+    "pnpm-lock.yaml",
+    "playwright-report"
+  ],
+  "words": [
+    "dprint",
+    "geprog",
+    "nuxt",
+    "nuxtjs"
+  ],
+  "overrides": [
+    {
+      "filename": ["i18n/locales/de.json"],
+      "language": "de,en",
+      "words": [
+      ]
+    },
+    {
+      "filename": ["package.json"],
+      "words": ["libatk1.0-0", "libatk-bridge2.0-0", "libcups2", "libxkbcommon0", "libatspi2.0-0", "libxcomposite1", "libxdamage1", "libxfixes3", "libxrandr2", "libgbm1"]
+    }
+  ]
+}

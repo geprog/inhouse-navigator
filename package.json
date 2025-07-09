@@ -1,0 +1,40 @@
+{
+  "name": "nuxt-template",
+  "type": "module",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "pnpm": ">=9.0.0",
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "lint": "eslint",
+    "spelling": "cspell lint --no-progress '**'",
+    "typecheck": "nuxt typecheck",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "test:e2e": "playwright test",
+    "playwright:install": "playwright install && sudo apt-get install libatk1.0-0 libatk-bridge2.0-0 libcups2 libxkbcommon0 libatspi2.0-0 libxcomposite1 libxdamage1 libxfixes3 libxrandr2 libgbm1"
+  },
+  "dependencies": {
+    "@nuxt/ui": "3.1.0",
+    "@nuxtjs/i18n": "9.5.5",
+    "nuxt": "3.17.5",
+    "tailwindcss": "4.1.10"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "4.14.1",
+    "@cspell/dict-de-de": "4.1.0",
+    "@nuxt/test-utils": "3.19.1",
+    "@playwright/test": "1.53.0",
+    "@vue/test-utils": "2.4.6",
+    "cspell": "9.1.1",
+    "eslint": "9.29.0",
+    "eslint-plugin-format": "1.0.1",
+    "happy-dom": "18.0.1",
+    "vitest": "3.2.3",
+    "vue-tsc": "2.2.10"
+  }
+}
