@@ -19,6 +19,7 @@ logs
 .DS_Store
 .fleet
 .idea
+*.glb
 
 # Local env files
 .env
@@ -28,4 +29,7 @@ logs
 # playwright report
 playwright-report/
 test-results/
+
+# python
+venv
 
