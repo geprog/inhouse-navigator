@@ -2,7 +2,7 @@
   <USlideover title="Update marker" :overlay="false">
     <template #body>
       <UCard>
-        <template #header>Start coordinate</template>
+        <template #header>Start coordinate (blue marker)</template>
         <UFormField label="X">
           <UInput v-model="start.x" type="number" step="0.1" />
         </UFormField>
@@ -14,7 +14,7 @@
         </UFormField>
       </UCard>
       <UCard>
-        <template #header>Target coordinate</template>
+        <template #header>Target coordinate (red marker)</template>
         <UFormField label="X">
           <UInput v-model="target.x" type="number" step="0.1" />
         </UFormField>

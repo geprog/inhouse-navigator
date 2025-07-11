@@ -9,10 +9,10 @@ export default function (scene: THREE.Scene, navMesh?: Ref<NavMesh | undefined>)
   const currentCoordinate = ref<{ x: number, y: number, z: number }>({ x: 0, y: 0, z: 0 });
   const targetCoordinate = ref<{ x: number, y: number, z: number }>({ x: 0, y: 0, z: 0 });
 
-  const coordinateMarker = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0, 1), new THREE.MeshNormalMaterial({ colorNode: color(0x0000ff) }));
+  const coordinateMarker = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0, 1), new THREE.MeshLambertMaterial({ color: 0x0000ff }));
   scene.add(coordinateMarker);
 
-  const targetMarker = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0, 1), new THREE.MeshNormalMaterial({ colorNode: color(0xff0000) }));
+  const targetMarker = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0, 1), new THREE.MeshLambertMaterial({ color: 0xff0000 }));
   scene.add(targetMarker);
 
   watch(currentCoordinate, () => {
@@ -45,13 +45,53 @@ export default function (scene: THREE.Scene, navMesh?: Ref<NavMesh | undefined>)
   const line = new THREE.Line(pathGeometry, new THREE.LineBasicMaterial({ color: 0xff0000 }));
   scene.add(line);
 
+  function getPointOnNavMesh(coordinate: { x: number, y: number; z: number }) {
+    if (!navMesh || !navMesh.value) {
+      return undefined;
+    }
+    const navMeshQuery = new NavMeshQuery(navMesh.value);
+    const { success, status, point, polyRef, isPointOverPoly } =
+      navMeshQuery.findClosestPoint(coordinate);
+    console.log('Point on nav mesh result', success, status, point, polyRef, isPointOverPoly);
+    if (success && point) {
+      return point;
+    }
+    return undefined;
+  }
+  const start = computed(() => getPointOnNavMesh(currentCoordinate.value));
+  const end = computed(() => getPointOnNavMesh(targetCoordinate.value));
+
+  const startMarker = new THREE.Mesh(new THREE.SphereGeometry(0.5), new THREE.MeshLambertMaterial({ color: 0x0000ff }));
+  scene.add(startMarker);
+
+  const endMarker = new THREE.Mesh(new THREE.SphereGeometry(0.5), new THREE.MeshLambertMaterial({ color: 0xff0000 }));
+  scene.add(endMarker);
+
+  watch(start, () => {
+    if (start.value) {
+      const { x, y, z } = start.value;
+      startMarker.position.set(x, y, z);
+    }
+  }, { deep: true });
+
+  watch(end, () => {
+    if (end.value) {
+      const { x, y, z } = end.value;
+      endMarker.position.set(x, y, z);
+    }
+  }, { deep: true });
+
   const path = computed(() => {
     if (!navMesh || !navMesh.value) {
       return [];
     }
-    debugger;
+    if (!start.value || !end.value) {
+      return [];
+    }
+
     const navMeshQuery = new NavMeshQuery(navMesh.value);
-    const { success, error, path } = navMeshQuery.computePath(currentCoordinate.value, targetCoordinate.value);
+    const { success, error, path } = navMeshQuery.computePath(start.value, end.value);
+    console.log('path finding result', success, error);
     if (!success || !path) {
       return [];
     }
@@ -69,5 +109,5 @@ export default function (scene: THREE.Scene, navMesh?: Ref<NavMesh | undefined>)
     pathGeometry.setFromPoints(path.value);
   }, { immediate: true });
 
-  return { currentCoordinate, path, navMesh };
+  return { currentCoordinate, targetCoordinate, path, navMesh, start, end };
 }
