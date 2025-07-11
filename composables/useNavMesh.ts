@@ -11,7 +11,7 @@ async function initRecast() {
 
 void initRecast();
 
-export default function useNavMesh(scene: THREE.Scene) {
+export default function useNavMesh(scene: THREE.Scene, addHelper?: boolean) {
   if (!recastReady.value) {
     return undefined;
   }
@@ -33,8 +33,10 @@ export default function useNavMesh(scene: THREE.Scene) {
     return undefined;
   }
 
-  const navMeshHelper = new NavMeshHelper(navMesh);
-  scene.add(navMeshHelper);
+  if (addHelper) {
+    const navMeshHelper = new NavMeshHelper(navMesh);
+    scene.add(navMeshHelper);
+  }
 
   return navMesh;
 }

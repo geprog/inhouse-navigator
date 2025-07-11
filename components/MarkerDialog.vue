@@ -25,6 +25,14 @@
           <UInput v-model="target.z" type="number" step="0.1" />
         </UFormField>
       </UCard>
+      <UCard>
+        <template #header>Path</template>
+        <ul>
+          <li v-for="(p, index) of path" :key="index">
+            x: {{ p.x }}, y: {{ p.y }}, z: {{ p.z }}
+          </li>
+        </ul>
+      </UCard>
     </template>
   </USlideover>
 </template>
@@ -33,4 +41,6 @@
 type Coordinate = { x: number, y: number, z: number };
 defineModel<Coordinate>('start', { required: true });
 defineModel<Coordinate>('target', { required: true });
+
+defineProps<{ path: Coordinate[] }>();
 </script>

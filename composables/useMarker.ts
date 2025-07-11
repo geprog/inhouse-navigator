@@ -25,25 +25,9 @@ export default function (scene: THREE.Scene, navMesh?: Ref<NavMesh | undefined>)
     targetMarker.position.set(x, y, z);
   }, { deep: true });
 
-  const overlay = useOverlay();
-
-  async function changeCoordinate() {
-    if (overlay.overlays.length > 0) {
-      return;
-    }
-    const showNodesDialog = overlay.create(MarkerDialog, { props: { start: currentCoordinate.value, target: targetCoordinate.value }, destroyOnClose: true });
-    const instance = showNodesDialog.open()
-    const newCoordinate = await instance.result;
-    if (newCoordinate) {
-      currentCoordinate.value = newCoordinate;
-    }
-  }
-
-  onKeyStroke('3', () => changeCoordinate());
-
   const pathGeometry = new THREE.BufferGeometry().setFromPoints([]);
-  const line = new THREE.Line(pathGeometry, new THREE.LineBasicMaterial({ color: 0xff0000 }));
-  scene.add(line);
+  const pathLine = new THREE.Line(pathGeometry, new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 5 }));
+  scene.add(pathLine);
 
   function getPointOnNavMesh(coordinate: { x: number, y: number; z: number }) {
     if (!navMesh || !navMesh.value) {
@@ -106,8 +90,27 @@ export default function (scene: THREE.Scene, navMesh?: Ref<NavMesh | undefined>)
   });
 
   watch(path, () => {
-    pathGeometry.setFromPoints(path.value);
-  }, { immediate: true });
+    debugger;
+    const pathGeometry = new THREE.BufferGeometry().setFromPoints(path.value);
+    pathLine.geometry = pathGeometry;
+  }, { deep: true, immediate: true });
+
+
+  const overlay = useOverlay();
+
+  async function changeCoordinate() {
+    if (overlay.overlays.length > 0) {
+      return;
+    }
+    const showNodesDialog = overlay.create(MarkerDialog, { props: { start: currentCoordinate.value, target: targetCoordinate.value, path: path.value }, destroyOnClose: true });
+    const instance = showNodesDialog.open()
+    const newCoordinate = await instance.result;
+    if (newCoordinate) {
+      currentCoordinate.value = newCoordinate;
+    }
+  }
+
+  onKeyStroke('3', () => changeCoordinate());
 
   return { currentCoordinate, targetCoordinate, path, navMesh, start, end };
 }
