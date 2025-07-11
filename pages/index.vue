@@ -4,6 +4,6 @@
 
 <script setup lang="ts">
 const { scene, camera } = useScene();
-const { nodes } = use3dModel(scene, camera);
-const { currentCoordinate } = useMarker(scene);
+const { nodes, currentModel, currentNavMesh } = use3dModel(scene, camera);
+const { currentCoordinate, path } = useMarker(scene, currentNavMesh);
 </script>

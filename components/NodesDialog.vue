@@ -3,7 +3,12 @@
     <template #body>
       <ul>
         <li v-for="(node, index) of nodes" :key="index">
-          {{ node.name }} - ({{ node.type }})
+          {{ node.name }} - ({{ node.type }}) [{{ node.children.length }}]
+          <ul>
+            <li v-for="(child, childIndex) of node.children" :key="childIndex">
+              {{ child.name }} - ({{ child.type }})
+            </li>
+          </ul>
         </li>
       </ul>
     </template>
